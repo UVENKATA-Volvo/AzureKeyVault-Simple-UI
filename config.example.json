@@ -1,0 +1,6 @@
+[
+  {"name": "your-dev-vault", "nickname": "Development", "env": "dev"},
+  {"name": "your-test-vault", "nickname": "Integration testing", "env": "test"},
+  {"name": "your-prod-vault", "nickname": "Production", "env": "prod"},
+  {"name": "your-shared-vault", "env": "other"}
+]

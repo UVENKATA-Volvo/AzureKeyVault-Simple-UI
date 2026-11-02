@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="desk-token" content="__DESK_TOKEN__">
+  <meta name="color-scheme" content="dark light">
+  <title>Key Vault Desk</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#workspace">Skip to workspace</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Key Vault Desk home"><span class="brand-icon" aria-hidden="true">K<span>:</span></span><span>Key Vault <strong>Desk</strong><small>YOUR LOCAL SECRET WORKSPACE</small></span></a>
+    <div class="header-actions">
+      <span class="connection" id="connection" role="status"><i></i><span>Connecting</span></span>
+      <button class="icon-button" id="theme" aria-label="Switch to light theme" title="Switch theme">◐</button>
+      <button class="quiet" id="lock">Lock session</button>
+    </header>
+    <main id="workspace">
+        <h1 class="sr-only">Secret workspace</h1>
+  </div>
+      <section class="vault-controls" aria-label="Select key vault">
+        <div><label for="vault-filter">Filter vaults</label><input id="vault-filter" type="search" placeholder="Vault name or nickname" autocomplete="off"></div>
+        <div><label for="vault-env-filter">Environment</label><select id="vault-env-filter"><option value="all">All environments</option><option value="dev">Dev</option><option value="test">Test</option><option value="prod">Prod</option><option value="other">Other</option></select></div>
+        <div class="vault-picker"><label for="vault-select">Key vault</label><select id="vault-select" aria-describedby="vault-results" disabled><option value="">Loading vaults...</option></select></div>
+        <p id="vault-results" role="status">Loading configuration...</p>
+      </section>
+      <div class="production-notice" id="production-notice" hidden>You are viewing production. Every save creates a new live secret version. Confirm the destination before saving.</div>
+      <div class="workspace-grid">
+        <section class="panel inventory" aria-labelledby="inventory-title">
+          <div class="panel-heading"><h2 id="inventory-title">Secrets <span class="count" id="total">0</span></h2><button class="quiet" id="refresh" title="Fetch latest metadata from Azure">↻ Refresh</button></div>
+          <p class="vault-name" id="vault-name">Loading vault configuration...</p>
+          <div class="filter-wrap"><label class="sr-only" for="filter">Filter secret names</label><span aria-hidden="true">⌕</span><input id="filter" type="search" placeholder="Find a secret by name..." autocomplete="off"><kbd>/</kbd></div>
+          <div class="inventory-toolbar"><span id="results" role="status">Loading inventory...</span><label class="status-filter">Status <select id="status-filter"><option value="all">All secrets</option><option value="active">Active</option><option value="inactive">Inactive</option></select></label></div>
+          <div class="inventory-list" id="inventory-list" aria-busy="true"></div>
+          <div class="inventory-footer"><span id="freshness">Metadata only. Values stay hidden.</span><button class="text-button" id="hide-all">Hide all values</button></div>
+        </section>
+        <section class="panel editor" id="editor" aria-labelledby="editor-title">
+          <div class="panel-heading"><h2 id="editor-title">Add or update secret</h2></div>
+          <form id="secret-form" autocomplete="off">
+            <label for="secret-name">Secret name</label>
+            <input id="secret-name" type="text" placeholder="e.g. payments-api-key" maxlength="127" required spellcheck="false" aria-describedby="name-help">
+            <label class="checkbox"><input id="normalize" type="checkbox" checked> Normalize name <span title="Lowercase, replace special characters with hyphens, and trim to 127 characters." aria-label="Normalization help">ⓘ</span></label>
+            <p class="field-help" id="name-help">Letters, numbers and hyphens. Up to 127 characters.</p>
+            <div class="label-row"><label for="secret-value">Secret value</label><button class="text-button" id="toggle-value" type="button" aria-pressed="false">Show value</button></div>
+            <textarea id="secret-value" class="masked" rows="6" placeholder="Paste or type your secret value" required spellcheck="false" autocapitalize="off" aria-describedby="value-help"></textarea>
+            <p class="field-help" id="value-help">Multiline supported. Maximum 25,600 UTF-8 bytes.</p>
+            <div class="save-target"><span class="small muted">DESTINATION</span><strong id="save-target">Select a vault</strong></div>
+            <p class="form-error" id="form-error" role="alert" hidden></p>
+            <button class="primary" id="save" type="submit" disabled>Save secret</button>
+            <button class="text-button reset" id="reset-form" type="button">Clear form</button>
+          </form>
+        </section>
+      </div>
+    </main>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title">
+    <h2 id="confirm-title">Create a new version?</h2>
+    <p id="confirm-description"></p>
+    <div id="prod-confirm-wrap" hidden><label for="prod-confirm">Type the production vault name to confirm</label><input id="prod-confirm" autocomplete="off" spellcheck="false"></div>
+    <p class="field-help">Existing versions remain in Azure. This app cannot roll them back.</p>
+    <div class="dialog-actions"><button class="quiet" id="cancel-save">Cancel</button><button class="primary" id="confirm-save">Confirm save</button></div>
+  </dialog>
+  <dialog id="lock-dialog" aria-labelledby="lock-title"><h2 id="lock-title">Lock this session?</h2><p>Clears this page and invalidates the server session for all tabs. Restart the app to reconnect. Your shared Azure CLI login is not signed out.</p><div class="dialog-actions"><button class="quiet" id="cancel-lock">Cancel</button><button class="primary" id="confirm-lock">Lock session</button></div></dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>
