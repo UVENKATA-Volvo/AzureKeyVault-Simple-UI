@@ -15,6 +15,7 @@ import traceback
 import urllib.error
 import urllib.parse
 import urllib.request
+import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 
@@ -451,6 +452,7 @@ def main():
     parser.add_argument("--config", type=Path, default=ROOT / "config.json")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--debug", action="store_true", help="Print sanitized diagnostic logs to the terminal")
+    parser.add_argument("--open", action="store_true", help="Open the app in the default browser after start")
     args = parser.parse_args()
     logging.basicConfig(level=logging.DEBUG if args.debug else logging.WARNING,
                         format="%(asctime)s %(levelname)s [%(threadName)s] %(message)s")
@@ -467,6 +469,8 @@ def main():
     print("Local use only. Ctrl+C stops the server. No secret values are written to app storage.")
     if args.debug:
         print("Debug enabled: sanitized diagnostics on stderr. Tokens, values, names and URL queries are omitted.")
+    if args.open:
+        webbrowser.open(server.origin)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

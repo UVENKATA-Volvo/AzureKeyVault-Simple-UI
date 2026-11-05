@@ -95,6 +95,13 @@ The original `{"nonprod": "vault-a", "prod": "vault-b"}` format is still accepte
 mapping to `test` and `prod` respectively. Migrate to the array to add vaults or
 nicknames. Existing files are not rewritten automatically.
 
+**Quick start:** double-click `Start-KeyVaultDesk.bat` in the repo root. It
+checks Python, Azure CLI and `config.json`, starts the server, and opens your
+browser. Close the window or press **Ctrl+C** to stop. Arguments pass through,
+for example `Start-KeyVaultDesk.bat --debug --port 8877`.
+
+Or run manually (`--open` launches the browser automatically):
+
 ```powershell
 python .\app.py
 ```
@@ -240,6 +247,7 @@ Share this source repository or a reviewed archive containing:
 app.py
 config.example.json
 README.md
+Start-KeyVaultDesk.bat
 UI.md
 static\
 tests\
